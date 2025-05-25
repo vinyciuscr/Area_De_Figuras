@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
+#include <iomanip>
 
 using namespace std;
 
-const float PI = 3.14;
+//const double PI = 3.14159265358979323846;
 
 class Ponto{
     int _x, _y;
@@ -34,6 +36,7 @@ class FiguraGeometrica {
     Ponto getPontoA() {return A; }
     virtual void Desenha() = 0;
     virtual float CalculaArea() = 0;
+    virtual ~FiguraGeometrica() = default;
 
 };
 
@@ -49,7 +52,7 @@ class Retangulo : public FiguraGeometrica{
     }
 
     float CalculaArea() override{
-        return this->comprimento * this->largura;
+        return (this->comprimento) * this->largura;
     }
 
 };
@@ -63,11 +66,11 @@ class Triangulo : public FiguraGeometrica{
     Triangulo(int x, int y, int base, int altura) : FiguraGeometrica(x, y), base(base), altura(altura){}
 
     void Desenha() override{
-        cout << "Triangulo" << endl;
+        cout << "TRIANGULO" << endl;
     }
 
     float CalculaArea() override{
-        return (this->base * this->altura) / 2;
+        return (this->base * this->altura) / 2.0;
     }
 
 };
@@ -81,11 +84,11 @@ class Circulo : public FiguraGeometrica{
     Circulo(int x, int y, int raio) : FiguraGeometrica(x, y), raio(raio){}
 
     void Desenha() override{
-        cout << "RETANGULO" << endl;
+        cout << "CIRCULO" << endl;
     }
 
     float CalculaArea() override{
-        return PI*((this->raio * this->raio));
+        return M_PI * (this->raio * this->raio); 
     }
 
 };
@@ -110,6 +113,7 @@ int main(){
         for(FiguraGeometrica* figura : figuras){
             delete figura;
         }
+        figuras.clear();
             break;
         }
         else if(opc == 'R'){
@@ -118,26 +122,26 @@ int main(){
         }
         else if(opc == 'C'){
             cin >> a >> b >>  raio;
-            Circulo circulo(a, b, raio);
             figuras.push_back(new Circulo(a, b, raio));
         }
         else if(opc == 'T'){
-            cin >> a, b, base, altura;
-            Triangulo triangulo(a, b, base, altura);
+            cin >> a >> b >> base >> altura;
             figuras.push_back(new Triangulo(a, b, base, altura));
         }
         else if(opc == 'D'){
             for(FiguraGeometrica* figura : figuras){
                 Ponto ponto = figura->getPontoA();
-                cout << ponto.getX() << ponto.getY();
+                cout << ponto.getX() << " " << ponto.getY() << " ";
                 figura->Desenha();
             }
         }
         else if(opc == 'A'){
+            area = 0;    
             for(FiguraGeometrica* figura : figuras){
                 area += figura->CalculaArea();
             }
-            cout << area << endl;
+            cout << fixed << setprecision(2) << area<< endl;
+
         }
     }
 
